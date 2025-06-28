@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    .calculator {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: flex;
+    }
+    .panel {
+      display: grid;
+      grid-template-columns: repeat(4, 60px);
+      grid-gap: 10px;
+    }
+    .display {
+      grid-column: span 4;
+      height: 50px;
+      font-size: 24px;
+      padding: 5px;
+      text-align: left;
+    }
+    button {
+      height: 50px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .history {
+      margin-left: 20px;
+      width: 200px;
+    }
+    .history textarea {
+      width: 100%;
+      height: 240px;
+      resize: none;
+    }
+  </style>
+</head>
+<body>
+<div class="calculator">
+  <div class="main">
+    <div class="panel">
+      <input type="text" id="display" class="display" value="0" disabled>
+      <button onclick="operate('sqrt')">&#8730;</button>
+      <button onclick="operate('square')">x²</button>
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="backspace()">&larr;</button>
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button onclick="append('/')">/</button>
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button onclick="append('*')">*</button>
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button onclick="append('-')">-</button>
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button onclick="calculate()">=</button>
+      <button onclick="append('+')">+</button>
+    </div>
+  </div>
+  <div class="history">
+    <h3>History</h3>
+    <textarea id="history" readonly></textarea><br>
+    <button onclick="clearHistory()">Clear</button>
+  </div>
+</div>
+
+<script>
+  const display = document.getElementById('display');
+  const history = document.getElementById('history');
+
+  function append(value) {
+    if (display.value === "0" || display.value === "Error") {
+      display.value = value;
+    } else {
+      display.value += value;
+    }
+  }
+
+  function clearDisplay() {
+    display.value = "0";
+  }
+
+  function backspace() {
+    display.value = display.value.slice(0, -1) || "0";
+  }
+
+  function formatResult(result) {
+    return Number.isInteger(result) ? result : result.toFixed(2);
+  }
+
+  function operate(type) {
+    try {
+      const val = parseFloat(display.value);
+      let result;
+      if (type === 'sqrt') {
+        result = Math.sqrt(val);
+        history.value += `√${val} = ${formatResult(result)}\n`;
+      } else if (type === 'square') {
+        result = val * val;
+        history.value += `${val}² = ${formatResult(result)}\n`;
+      }
+      display.value = formatResult(result);
+    } catch {
+      display.value = "Error";
+    }
+  }
+
+  function calculate() {
+    try {
+      const result = eval(display.value);
+      const formatted = formatResult(result);
+      history.value += `${display.value} = ${formatted}\n`;
+      display.value = formatted;
+    } catch {
+      display.value = "Error";
+    }
+  }
+
+  function clearHistory() {
+    history.value = "";
+  }
+</script>
+</body>
+</html>
