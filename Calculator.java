@@ -1,11 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class Calculator {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Simple Calculator");
+        JFrame frame = new JFrame("Calculator");
         frame.setSize(600, 420);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
@@ -24,11 +23,11 @@ public class Calculator {
         panel.setBackground(new Color(220, 220, 220));
 
         String[] buttons = {
-                "√", "x²", "C", "←",
-                "7", "8", "9", "/",
-                "4", "5", "6", "*",
-                "1", "2", "3", "-",
-                "0", ".", "=", "+"
+            "√", "x²", "C", "←",
+            "7", "8", "9", "/",
+            "4", "5", "6", "*",
+            "1", "2", "3", "-",
+            "0", ".", "=", "+"
         };
 
         JTextArea historyArea = new JTextArea();
@@ -68,18 +67,22 @@ public class Calculator {
                             case "←":
                                 if (!current.isEmpty()) {
                                     display.setText(current.length() == 1 ? "0" :
-                                            current.substring(0, current.length() - 1));
+                                        current.substring(0, current.length() - 1));
                                 }
                                 break;
                             case "√":
                                 double val = Double.parseDouble(current);
                                 double sqrtResult = Math.sqrt(val);
-                                display.setText(formatResult(sqrtResult));
+                                String sqrtFormatted = formatResult(sqrtResult);
+                                historyArea.append("√" + current + " = " + sqrtFormatted + "\n");
+                                display.setText(sqrtFormatted);
                                 break;
                             case "x²":
                                 double base = Double.parseDouble(current);
                                 double sqrResult = base * base;
-                                display.setText(formatResult(sqrResult));
+                                String sqrFormatted = formatResult(sqrResult);
+                                historyArea.append(current + "² = " + sqrFormatted + "\n");
+                                display.setText(sqrFormatted);
                                 break;
                             case "=":
                                 char operator = ' ';
